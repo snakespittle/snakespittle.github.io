@@ -85,7 +85,7 @@
                             .append(genBlock(data, level + 1));
 
                         if (['object', 'array'].indexOf($.type(data)) !== -1 && !$.isEmptyObject(data)) {
-                            item.prepend(collapser());
+                            item.prepend(collapser(true));
                         }
 
                         if (cnt > 0) {
@@ -136,7 +136,7 @@
                             .append(genBlock(data, level + 1));
 
                         if (['object', 'array'].indexOf($.type(data)) !== -1 && !$.isEmptyObject(data)) {
-                            item.prepend(collapser());
+                            item.prepend(collapser(true));
                         }
 
                         if (cnt > 0) {
