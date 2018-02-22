@@ -85,7 +85,7 @@
                             .append(genBlock(data, level + 1));
 
                         if (['object', 'array'].indexOf($.type(data)) !== -1 && !$.isEmptyObject(data)) {
-                            item.prepend(collapser(true));
+                            item.prepend(collapser(window.pre_collapsed));
                         }
 
                         if (cnt > 0) {
@@ -136,7 +136,7 @@
                             .append(genBlock(data, level + 1));
 
                         if (['object', 'array'].indexOf($.type(data)) !== -1 && !$.isEmptyObject(data)) {
-                            item.prepend(collapser(true));
+                            item.prepend(collapser(window.pre_collapsed));
                         }
 
                         if (cnt > 0) {
@@ -200,8 +200,9 @@
         return genBlock(json);        
     };
 
-    return $.fn.jsonView = function(json, options) {
+    return $.fn.jsonView = function(json, pre_collapsed = true, options) {
         var $this = $(this);
+        window.pre_collapsed = pre_collapsed;
 
         options = $.extend({}, {
             nl2br: true

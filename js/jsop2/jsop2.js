@@ -286,7 +286,7 @@ function onUp(e) {
       });
     },
     initJSOP: function() {
-      var jsonview_css_href = 'https://snakespittle.github.io/js/jsonview/jquery.json-view.min.css?v=1.2';
+      var jsonview_css_href = 'https://snakespittle.github.io/js/jsonview/jquery.json-view.min.css?v=1.3';
       var jsop_css_href = 'https://snakespittle.github.io/js/jsop2/jsop2.css';
 
       if ($("#jsop").length > 0) {
