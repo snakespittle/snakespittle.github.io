@@ -308,6 +308,7 @@ function onUp(e) {
         }
       }
 
+      console.log(window.json_to_prettify);
       if (window.json_to_prettify.length > 0) {
         $('#pretty_tree').jsonView(window.json_to_prettify);
       }
