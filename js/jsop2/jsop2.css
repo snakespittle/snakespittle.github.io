@@ -12,6 +12,7 @@
   border: 2px solid purple;
   background: #fefefe;
   z-index: 10000000000;
+  max-width: 100%;
 }
 
 #jsop_header {
