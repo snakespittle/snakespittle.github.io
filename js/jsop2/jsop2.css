@@ -1,0 +1,51 @@
+#jsop {
+  position: fixed;
+  width: 30%;
+  height: 50vh;
+  top: 25%;
+  left: 10%;
+  
+  
+  margin: 0;
+  padding: 0;
+  z-index: 99;
+  border: 2px solid purple;
+  background: #fefefe;
+  z-index: 10000000000;
+}
+
+#jsop_header {
+  font-family: monospace;
+  background: purple;
+  color: white;
+  font-size: 24px;
+  height: 30px;
+  text-align: center;
+}
+#jsop_ghost {
+  background: #999;
+  opacity: 0.2;
+
+  width: 30%;
+  height: 50vh;
+  top: 25%;
+  left: 10%;
+  
+  position: fixed;
+  margin: 0;
+  padding: 0;
+  z-index: 98;
+
+  -webkit-transition: all 0.25s ease-in-out;
+  -moz-transition: all 0.25s ease-in-out;
+  -ms-transition: all 0.25s ease-in-out;
+  -o-transition: all 0.25s ease-in-out;
+  transition: all 0.25s ease-in-out;
+}
+#jsop_content {
+  overflow: auto;
+  max-height: calc(100% - 30px);
+}
+#pretty_tree {
+  white-space: nowrap;
+}
