@@ -309,7 +309,7 @@ function onUp(e) {
       }
 
       if (JSOP.json_to_prettify.length > 0) {
-        $('#pretty_tree').jsonView(json_to_prettify);
+        $('#pretty_tree').jsonView(JSOP.json_to_prettify);
       }
     },
     init: function(json_to_prettify = '') {
