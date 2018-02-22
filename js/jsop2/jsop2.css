@@ -45,7 +45,7 @@
 }
 #jsop_content {
   overflow: auto;
-  max-height: calc(100% - 30px);
+  height: calc(100% - 30px);
 }
 #pretty_tree {
   white-space: nowrap;
