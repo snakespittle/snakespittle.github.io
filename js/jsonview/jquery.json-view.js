@@ -85,7 +85,7 @@
                             .append(genBlock(data, level + 1));
 
                         if (['object', 'array'].indexOf($.type(data)) !== -1 && !$.isEmptyObject(data)) {
-                            item.prepend(collapser(window.pre_collapsed));
+                            item.prepend(collapser(window.jsonview_pre_collapsed));
                         }
 
                         if (cnt > 0) {
@@ -136,7 +136,7 @@
                             .append(genBlock(data, level + 1));
 
                         if (['object', 'array'].indexOf($.type(data)) !== -1 && !$.isEmptyObject(data)) {
-                            item.prepend(collapser(window.pre_collapsed));
+                            item.prepend(collapser(window.jsonview_pre_collapsed));
                         }
 
                         if (cnt > 0) {
@@ -200,9 +200,11 @@
         return genBlock(json);        
     };
 
-    return $.fn.jsonView = function(json, pre_collapsed = true, options) {
+    return $.fn.jsonView = function(json, options) {
         var $this = $(this);
-        window.pre_collapsed = pre_collapsed;
+        if (typeof window.jsonview_pre_collapsed === 'undefined') {
+            window.jsonview_pre_collapsed = true;
+        }
 
         options = $.extend({}, {
             nl2br: true
@@ -216,7 +218,7 @@
         }
 
         var json_view_class = 'json-view';
-        if (window.pre_collapsed) {
+        if (window.jsonview_pre_collapsed) {
             json_view_class += ' pre-collapsed';
         }
         $this.append($('<div />', {
