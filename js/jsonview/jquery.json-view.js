@@ -215,8 +215,12 @@
             }
         }
 
+        var json_view_class = 'json-view';
+        if (window.pre_collapsed) {
+            json_view_class += ' pre-collapsed';
+        }
         $this.append($('<div />', {
-            class: 'json-view'
+            class: json_view_class
         }).append(formatter(json, options)));
 
         return $this;
