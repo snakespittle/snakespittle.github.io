@@ -308,8 +308,11 @@ function onUp(e) {
         }
       }
 
-      if (Object.keys(window.json_to_prettify).length > 0) {
-        $('#pretty_tree').jsonView(window.json_to_prettify);
+      JSOP.prettyTree(window.json_to_prettify);
+    },
+    prettyTree: function(pretty_tree_recipe) {
+      if (Object.keys(pretty_tree_recipe).length > 0) {
+        $('#pretty_tree').jsonView(pretty_tree_recipe);
       }
     }
   }
