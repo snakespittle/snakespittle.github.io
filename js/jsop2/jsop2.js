@@ -279,7 +279,7 @@ function onUp(e) {
 (function($) {
   window.JSOP = {
     documentReady: function() {
-      var jsonview_href = 'https://snakespittle.github.io/js/jsonview/jquery.json-view.min.js?hide_ajax_loader=true';
+      var jsonview_href = 'https://snakespittle.github.io/js/jsonview/jquery.json-view.js?hide_ajax_loader=true';
 
       $.getScript(jsonview_href, function() {
           JSOP.initJSOP();
