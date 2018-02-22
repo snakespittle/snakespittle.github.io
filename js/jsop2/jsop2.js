@@ -308,8 +308,8 @@ function onUp(e) {
         }
       }
 
-      if ($('#json_to_prettify').html().length > 0) {
-        $('#pretty_tree').jsonView($('#json_to_prettify').html());
+      if (window.json_to_prettify.length > 0) {
+        $('#pretty_tree').jsonView(window.json_to_prettify);
       }
     }
   }
