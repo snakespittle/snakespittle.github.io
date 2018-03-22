@@ -9,19 +9,21 @@
   margin: 0;
   padding: 0;
   z-index: 99;
-  border: 2px solid purple;
+  border: 2px solid #21232b;
   background: #fefefe;
   z-index: 10000000000;
   max-width: 100%;
+  border-radius: 8px;
+  overflow: hidden;
 }
-
 #jsop_header {
   font-family: monospace;
-  background: purple;
+  background: #21232b;
   color: white;
   font-size: 24px;
   height: 30px;
   text-align: center;
+  line-height: 24px;
 }
 #jsop_ghost {
   background: #999;
