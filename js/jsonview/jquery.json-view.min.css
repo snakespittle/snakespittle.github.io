@@ -18,3 +18,9 @@
 .json-view .bool,.json-view .null,.json-view .num,.json-view .undef{font-weight:700;color:#1A01CC}
 .json-view .str{color:#800}
 .json-view.pre-collapsed .level0 .block ul{display:none;}
+
+.json-view.pre-collapsed-level-1 .level1 .block ul{display:none;}
+.json-view.pre-collapsed-level-2 .level2 .block ul{display:none;}
+.json-view.pre-collapsed-level-3 .level3 .block ul{display:none;}
+.json-view.pre-collapsed-level-4 .level4 .block ul{display:none;}
+.json-view.pre-collapsed-level-5 .level5 .block ul{display:none;}
