@@ -85,7 +85,7 @@
                             .append(genBlock(data, level + 1));
 
                         if (['object', 'array'].indexOf($.type(data)) !== -1 && !$.isEmptyObject(data)) {
-                            item.prepend(collapser(window.jsonview_pre_collapsed));
+                            item.prepend(collapser(window.jsonview_pre_collapsed && level >= window.jsonview_pre_collapsed_level));
                         }
 
                         if (cnt > 0) {
@@ -136,7 +136,7 @@
                             .append(genBlock(data, level + 1));
 
                         if (['object', 'array'].indexOf($.type(data)) !== -1 && !$.isEmptyObject(data)) {
-                            item.prepend(collapser(window.jsonview_pre_collapsed));
+                            item.prepend(collapser(window.jsonview_pre_collapsed && level >= window.jsonview_pre_collapsed_level));
                         }
 
                         if (cnt > 0) {
@@ -204,6 +204,9 @@
         var $this = $(this);
         if (typeof window.jsonview_pre_collapsed === 'undefined') {
             window.jsonview_pre_collapsed = true;
+        }
+        if (typeof window.jsonview_pre_collapsed_level === 'undefined') {
+            window.jsonview_pre_collapsed_level = 0;
         }
 
         options = $.extend({}, {
