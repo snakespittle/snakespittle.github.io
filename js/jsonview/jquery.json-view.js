@@ -219,7 +219,11 @@
 
         var json_view_class = 'json-view';
         if (window.jsonview_pre_collapsed) {
-            json_view_class += ' pre-collapsed';
+            if (window.jsonview_pre_collapsed_level > 0) {
+                json_view_class += ' pre-collapsed-level-' + window.jsonview_pre_collapsed_level;
+            } else {
+                json_view_class += ' pre-collapsed';
+            }
         }
         $this.append($('<div />', {
             class: json_view_class
