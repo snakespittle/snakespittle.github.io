@@ -9,8 +9,7 @@
   margin: 0;
   padding: 0;
   z-index: 99;
-  border: 3px solid #21232b;
-  border-right: 2px solid #21232b;
+  border: 5px solid #21232b;
   background: #000000;
   z-index: 10000000000;
   max-width: 100%;

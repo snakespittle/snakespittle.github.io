@@ -287,7 +287,7 @@ function onUp(e) {
     },
     initJSOP: function() {
       var jsonview_css_href = 'https://snakespittle.github.io/js/jsonview/jquery.json-view.min.css?v=1.32';
-      var jsop_css_href = 'https://snakespittle.github.io/js/jsop2/jsop2.min.css?v=1.32';
+      var jsop_css_href = 'https://snakespittle.github.io/js/jsop2/jsop2.min.css?v=1.33';
 
       if ($("#jsop").length > 0) {
         var jsop_header = $('<div id="jsop_header">JSOP2 Backstage Pass</div>');
