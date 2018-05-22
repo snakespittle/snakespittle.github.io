@@ -12,7 +12,7 @@ var minHeight = 40;
 // Thresholds
 var FULLSCREEN_MARGINS = -50;
 var MARGINS = 20;
-var EDGE_MARGINS = 4;
+var EDGE_MARGINS = 7;
 
 // End of what's configurable.
 var clicked = null;

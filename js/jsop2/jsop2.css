@@ -9,8 +9,9 @@
   margin: 0;
   padding: 0;
   z-index: 99;
-  border: 2px solid #21232b;
-  background: #fefefe;
+  border: 3px solid #21232b;
+  border-right: 2px solid #21232b;
+  background: #000000;
   z-index: 10000000000;
   max-width: 100%;
   border-radius: 8px;
@@ -46,6 +47,7 @@
   transition: all 0.25s ease-in-out;
 }
 #jsop_content {
+  background: #fefefe;
   overflow: auto;
   height: calc(100% - 30px);
 }
