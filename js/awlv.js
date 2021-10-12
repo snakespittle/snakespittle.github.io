@@ -27,7 +27,7 @@ function saveCartAsWishlist() {
       items: items
     }
 
-    fetch('https://getpantry.cloud/apiv1/pantry/927f3b9f-0044-4a90-bfde-419e5d55fba4/basket/alphawishviktor', {method: 'POST', headers: { 'Content-Type': 'application/json;charset=utf-8' }, body: JSON.stringify(newList)}).then(response => console.log(response));
+    fetch('https://getpantry.cloud/apiv1/pantry/927f3b9f-0044-4a90-bfde-419e5d55fba4/basket/alphawishviktor', {method: 'PUT', headers: { 'Content-Type': 'application/json;charset=utf-8' }, body: JSON.stringify(newList)}).then(response => console.log(response));
   }
 }
 
