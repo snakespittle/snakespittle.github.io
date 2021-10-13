@@ -237,6 +237,9 @@ function alphaWishInit() {
         .alpha-wish-list-items-table-action-cell {
           text-align: right;
         }
+        .alpha-wish-list-items-table th {
+          padding-right: 10px;
+        }
     </style>`;
   var alphaWishModal = $('<div>');
   alphaWishModal.addClass('alpha-wish-modal');

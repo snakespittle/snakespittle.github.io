@@ -94,6 +94,13 @@ function showSavedNotice() {
   }, 2000)
 }
 
+function showDeletedNotice() {
+  $('.alpha-wish-deleted-notice').addClass('active');
+  setTimeout(function() {
+    $('.alpha-wish-deleted-notice').removeClass('active');
+  }, 2000)
+}
+
 function alphaWishInit() {
   var alphaWishStyles = `
     <style>
@@ -147,6 +154,11 @@ function alphaWishInit() {
           bottom: 10px;
           right: 10px;
           padding: 10px;
+          color: white;
+          background: #5cb85c;
+          border-radius: 5px;
+          letter-spacing: 0.5px;
+          border: none;
         }
         .alpha-wish-open-modal-button {
           left: 10px;
@@ -156,8 +168,10 @@ function alphaWishInit() {
           left: calc(100% - 80px);
           bottom: -20px;
           top: 100%;
+          background: #3858f5;
         }
-        .alpha-wish-saved-notice {
+        .alpha-wish-saved-notice,
+        .alpha-wish-deleted-notice {
           position: fixed;
           top: 0;
           bottom: 0;
@@ -177,8 +191,14 @@ function alphaWishInit() {
           letter-spacing: 0.5px;
           box-shadow: 3px 3px 25px #5c5c5c;
           display: none;
+          z-index: 100001;
         }
-        .alpha-wish-saved-notice.active {
+        .alpha-wish-deleted-notice {
+          background: red;
+          border: 2px solid darkred;
+        }
+        .alpha-wish-saved-notice.active,
+        .alpha-wish-deleted-notice.active {
           display: flex;
         }
         .alpha-wish-list-header {
@@ -188,6 +208,37 @@ function alphaWishInit() {
         }
         .alpha-wish-list-back {
           padding: 10px;
+          color: white;
+          background: #3858f5;
+          border-radius: 5px;
+          letter-spacing: 0.5px;
+          border: none;
+        }
+        .alpha-wish-list-row-delete,
+        .alpha-wish-list-items-row-delete {
+          padding: 10px;
+          color: white;
+          background: #ef4141;
+          border-radius: 5px;
+          letter-spacing: 0.5px;
+          border: none;
+        }
+        .alpha-wish-list-row-show {
+          padding: 10px;
+          color: white;
+          background: #5cb85c;
+          border-radius: 5px;
+          letter-spacing: 0.5px;
+          border: none;
+        }
+        .alpha-wish-list-items-table td {
+          padding: 0 10px;
+        }
+        .alpha-wish-list-items-table-action-cell {
+          text-align: right;
+        }
+        .alpha-wish-list-items-table th {
+          padding-right: 10px;
         }
     </style>`;
   var alphaWishModal = $('<div>');
@@ -202,6 +253,10 @@ function alphaWishInit() {
   alphaWishModal.append(alphaWishModalListContainer);
   alphaWishModal.append(alphaWishModalListItemsContainer);
   alphaWishModal.append(closeAlphaWishModalButton);
+
+  var alphaWishDeletedNotice = $('<div>');
+  alphaWishDeletedNotice.text('Raderat!');
+  alphaWishDeletedNotice.addClass('alpha-wish-deleted-notice');
 
   var alphaWishSavedNotice = $('<div>');
   alphaWishSavedNotice.text('Sparat!');
@@ -223,6 +278,7 @@ function alphaWishInit() {
   $('body').append(alphaWishModal);
   $('body').append(openAlphaWishModalButton);
   $('body').append(alphaWishSavedNotice);
+  $('body').append(alphaWishDeletedNotice);
 
   if ($('#checkout.content-bubble').length || $('.product.content-bubble').length) {
     $('body').append(addAlphaWishButton);
@@ -251,6 +307,15 @@ function alphaWishInit() {
     $('.alpha-wish-list-items-container').addClass('active');
     updateAlphaWishList(id);
   });
+  $(document.body).on('click', '.alpha-wish-list-row-delete', function() {
+    var id = $(this).closest('[data-alpha-wish-list-id]').data('alpha-wish-list-id');
+    deleteAlphaWishList(id);
+  });
+  $(document.body).on('click', '.alpha-wish-list-items-row-delete', function() {
+    var listId = $(this).closest('[data-alpha-wish-list-id]').data('alpha-wish-list-id');
+    var itemId = $(this).closest('[data-alpha-wish-list-item-id]').data('alpha-wish-list-item-id');
+    deleteAlphaWishListItem(listId, itemId);
+  });
   $(document.body).on('click', '.alpha-wish-list-back', function() {
     $('.alpha-wish-list-container').addClass('active');
     $('.alpha-wish-list-items-container').removeClass('active');
@@ -259,26 +324,59 @@ function alphaWishInit() {
   updateAlphaWishLists();
 }
 
-function updateAlphaWishList(id) {
+function deleteAlphaWishList(id) {
+  if (confirm('Är du säker?')) {
+    if (typeof window.alphaWishLists[id] !== 'undefined') {
+      delete window.alphaWishLists[id];
+      resetAlphaWishListBasketAfterDeletion();
+    }
+  }
+}
+
+function deleteAlphaWishListItem(listId, itemId) {
+  if (confirm('Är du säker?')) {
+    if (typeof window.alphaWishLists[listId] !== 'undefined' && typeof window.alphaWishLists[listId].items[itemId] !== 'undefined') {
+      delete window.alphaWishLists[listId].items[itemId];
+      resetAlphaWishListBasketAfterDeletion();
+    }
+  }
+}
+
+function resetAlphaWishListBasketAfterDeletion() {
+  fetch(
+    'https://getpantry.cloud/apiv1/pantry/927f3b9f-0044-4a90-bfde-419e5d55fba4/basket/alphawishviktor',
+    {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json;charset=utf-8' },
+      body: JSON.stringify(window.alphaWishLists)
+    }
+  ).then(function(response) {
+    showDeletedNotice();
+    updateAlphaWishLists();
+  });
+}
+
+function updateAlphaWishList(listId) {
   var listItemsContainer = $('.alpha-wish-list-items-container');
   listItemsContainer.html('');
   listItemsContainer.append(`
     <div class="alpha-wish-list-header">
-      <h4>` + window.alphaWishLists[id].name + `</h4>
+      <h4>` + window.alphaWishLists[listId].name + `</h4>
       <button class="alpha-wish-list-back">Tillbaka</button>
     </div>
   `);
   listItemsContainer.append(`
-    <table>
+    <table class="alpha-wish-list-items-table" data-alpha-wish-list-id="` + listId + `">
       <tr>
         <th>Bild</th>
         <th>Namn</th>
         <th>Antal</th>
         <th>Pris</th>
+        <th></th>
       </tr>
     </table>`
   );
-  var listItems = window.alphaWishLists[id].items;
+  var listItems = window.alphaWishLists[listId].items;
   for (const item in listItems) {
     var listItemRow = $(`
       <tr data-alpha-wish-list-item-id="` + listItems[item].id + `">
@@ -289,6 +387,7 @@ function updateAlphaWishList(id) {
         </td>
         <td>` + listItems[item].quantity + `</td>
         <td>` + listItems[item].price + `</td>
+        <td class="alpha-wish-list-items-table-action-cell"><button class="alpha-wish-list-items-row-delete">Radera</button></td>
       </tr>
     `);
     listItemsContainer.find('table').append(listItemRow);
@@ -317,11 +416,13 @@ function updateAlphaWishLists() {
       );
 
       for (const list in alphaWishListsArray) {
+        var prettyTime = alphaWishListsArray[list].time.match(/(.*)T(..:..:..)/)[1] + ' ' + alphaWishListsArray[list].time.match(/(.*)T(..:..:..)/)[2];
         var listRow = $(`
           <tr data-alpha-wish-list-id="` + alphaWishListsArray[list].id + `">
             <td>` + alphaWishListsArray[list].name + `</td>
-            <td>` + alphaWishListsArray[list].time + `</td>
+            <td>` + prettyTime + `</td>
             <td>` + Object.keys(alphaWishListsArray[list].items).length + `</td>
+            <td><button class="alpha-wish-list-row-delete">Radera</button></td>
             <td><button class="alpha-wish-list-row-show">Visa</button></td>
           </tr>
         `);
@@ -336,6 +437,9 @@ function updateAlphaWishLists() {
       ) {
         saveProductToWishlist();
         window.alphaWishAddProductOnLoad = 0;
+      } else if ($('.alpha-wish-list-items-container [data-alpha-wish-list-id]').length) {
+        var listId = $('.alpha-wish-list-items-container [data-alpha-wish-list-id]').data('alpha-wish-list-id');
+        updateAlphaWishList(listId);
       }
     });
 }
