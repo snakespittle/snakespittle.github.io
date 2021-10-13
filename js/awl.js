@@ -231,6 +231,12 @@ function alphaWishInit() {
           letter-spacing: 0.5px;
           border: none;
         }
+        .alpha-wish-list-items-table td {
+          padding: 0 10px;
+        }
+        .alpha-wish-list-items-table-action-cell {
+          text-align: right;
+        }
     </style>`;
   var alphaWishModal = $('<div>');
   alphaWishModal.addClass('alpha-wish-modal');
@@ -357,7 +363,7 @@ function updateAlphaWishList(listId) {
     </div>
   `);
   listItemsContainer.append(`
-    <table data-alpha-wish-list-id="` + listId + `">
+    <table class="alpha-wish-list-items-table" data-alpha-wish-list-id="` + listId + `">
       <tr>
         <th>Bild</th>
         <th>Namn</th>
@@ -378,7 +384,7 @@ function updateAlphaWishList(listId) {
         </td>
         <td>` + listItems[item].quantity + `</td>
         <td>` + listItems[item].price + `</td>
-        <td><button class="alpha-wish-list-items-row-delete">Radera</button></td>
+        <td class="alpha-wish-list-items-table-action-cell"><button class="alpha-wish-list-items-row-delete">Radera</button></td>
       </tr>
     `);
     listItemsContainer.find('table').append(listItemRow);
@@ -407,10 +413,11 @@ function updateAlphaWishLists() {
       );
 
       for (const list in alphaWishListsArray) {
+        var prettyTime = alphaWishListsArray[list].time.match(/(.*)T(..:..:..)/)[1] + ' ' + alphaWishListsArray[list].time.match(/(.*)T(..:..:..)/)[2];
         var listRow = $(`
           <tr data-alpha-wish-list-id="` + alphaWishListsArray[list].id + `">
             <td>` + alphaWishListsArray[list].name + `</td>
-            <td>` + alphaWishListsArray[list].time + `</td>
+            <td>` + prettyTime + `</td>
             <td>` + Object.keys(alphaWishListsArray[list].items).length + `</td>
             <td><button class="alpha-wish-list-row-delete">Radera</button></td>
             <td><button class="alpha-wish-list-row-show">Visa</button></td>
