@@ -115,7 +115,7 @@ function alphaWishInit() {
             margin-bottom: 70px;
           max-height: calc(100% - 100px);
           overflow: auto;
-          z-index: 100;
+          z-index: 100000;
         }
         .alpha-wish-modal.active {
           display: block;
