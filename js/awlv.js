@@ -27,8 +27,71 @@ function saveCartAsWishlist() {
       items: items
     }
 
-    fetch('https://getpantry.cloud/apiv1/pantry/927f3b9f-0044-4a90-bfde-419e5d55fba4/basket/alphawishviktor', {method: 'PUT', headers: { 'Content-Type': 'application/json;charset=utf-8' }, body: JSON.stringify(newList)}).then(response => console.log(response));
+    fetch(
+      'https://getpantry.cloud/apiv1/pantry/927f3b9f-0044-4a90-bfde-419e5d55fba4/basket/alphawishviktor',
+      {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json;charset=utf-8' },
+        body: JSON.stringify(newList)
+      }
+    ).then(function(response) {
+      showSavedNotice();
+      updateAlphaWishLists();
+    });
   }
+}
+
+function saveProductToWishlist() {
+  var listName = prompt("Välj lista för produkten, lämna tomt för standardlistan");
+
+  if (listName !== null) {
+    var wishlist = {};
+
+    listName = listName.trim().length ? listName.trim().toLowerCase() : 'standard'
+
+    let itemData = {
+      name: $('h3').text().trim(),
+      id: $('.reference').text().trim(),
+      href: window.location.href,
+      img: $('.product-image-wrapper').find('img').attr('src').replace('300x300', '80x80'),
+      quantity: 1,
+      price: $('.price').text().trim().match(/([0-9]*).kr/)[1]
+    };
+
+    if (typeof window.alphaWishLists[listName] !== 'undefined') {
+      wishlist[listName] = window.alphaWishLists[listName];
+      wishlist[listName].time = (new Date()).toISOString();
+      wishlist[listName].items[itemData.id] = itemData;
+    } else {
+      var items = {};
+      items[itemData.id] = itemData;
+      wishlist[listName] = {
+        id: listName,
+        name: listName,
+        time: (new Date()).toISOString(),
+        items: items
+      }
+    }
+
+    fetch(
+      'https://getpantry.cloud/apiv1/pantry/927f3b9f-0044-4a90-bfde-419e5d55fba4/basket/alphawishviktor',
+      {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json;charset=utf-8' },
+        body: JSON.stringify(wishlist)
+      }
+    ).then(function(response) {
+      showSavedNotice();
+      updateAlphaWishLists();
+    });
+  }
+}
+
+function showSavedNotice() {
+  $('.alpha-wish-saved-notice').addClass('active');
+  setTimeout(function() {
+    $('.alpha-wish-saved-notice').removeClass('active');
+  }, 2000)
 }
 
 function alphaWishInit() {
@@ -77,6 +140,7 @@ function alphaWishInit() {
           display: block;
         }
         .alpha-wish-add-list-button,
+        .alpha-wish-add-product-button,
         .alpha-wish-close-modal-button,
         .alpha-wish-open-modal-button {
           position: fixed;
@@ -91,7 +155,39 @@ function alphaWishInit() {
           position: sticky;
           left: calc(100% - 80px);
           bottom: -20px;
-            top: 100%;
+          top: 100%;
+        }
+        .alpha-wish-saved-notice {
+          position: fixed;
+          top: 0;
+          bottom: 0;
+          left: 0;
+          right: 0;
+          margin: auto;
+          background: #5cb85c;
+          width: 100px;
+          height: 50px;
+          align-items: center;
+          justify-content: center;
+          border: 2px solid green;
+          border-radius: 5px;
+          font-weight: bold;
+          text-transform: uppercase;
+          color: #fff;
+          letter-spacing: 0.5px;
+          box-shadow: 3px 3px 25px #5c5c5c;
+          display: none;
+        }
+        .alpha-wish-saved-notice.active {
+          display: flex;
+        }
+        .alpha-wish-list-header {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+        }
+        .alpha-wish-list-back {
+          padding: 10px;
         }
     </style>`;
   var alphaWishModal = $('<div>');
@@ -107,17 +203,31 @@ function alphaWishInit() {
   alphaWishModal.append(alphaWishModalListItemsContainer);
   alphaWishModal.append(closeAlphaWishModalButton);
 
+  var alphaWishSavedNotice = $('<div>');
+  alphaWishSavedNotice.text('Sparat!');
+  alphaWishSavedNotice.addClass('alpha-wish-saved-notice');
+
   var openAlphaWishModalButton = $('<button>');
   openAlphaWishModalButton.text('Visa');
   openAlphaWishModalButton.addClass('alpha-wish-open-modal-button');
 
   var addAlphaWishButton = $('<button>');
-  addAlphaWishButton.text('Spara');
-  addAlphaWishButton.addClass('alpha-wish-add-list-button');
+  if ($('#checkout.content-bubble').length) {
+    addAlphaWishButton.text('Spara varukorg');
+    addAlphaWishButton.addClass('alpha-wish-add-list-button');
+  } else if ($('.product.content-bubble').length) {
+    addAlphaWishButton.text('Spara produkt');
+    addAlphaWishButton.addClass('alpha-wish-add-product-button');
+  }
 
   $('body').append(alphaWishModal);
   $('body').append(openAlphaWishModalButton);
-  $('body').append(addAlphaWishButton);
+  $('body').append(alphaWishSavedNotice);
+
+  if ($('#checkout.content-bubble').length || $('.product.content-bubble').length) {
+    $('body').append(addAlphaWishButton);
+  }
+
   $('body').append(alphaWishStyles);
 
   $(document.body).on('click', '.alpha-wish-close-modal-button', function() {
@@ -132,21 +242,32 @@ function alphaWishInit() {
   $(document.body).on('click', '.alpha-wish-add-list-button', function() {
     saveCartAsWishlist();
   });
+  $(document.body).on('click', '.alpha-wish-add-product-button', function() {
+    saveProductToWishlist();
+  });
   $(document.body).on('click', '.alpha-wish-list-row-show', function() {
     var id = $(this).closest('[data-alpha-wish-list-id]').data('alpha-wish-list-id');
     $('.alpha-wish-list-container').removeClass('active');
     $('.alpha-wish-list-items-container').addClass('active');
     updateAlphaWishList(id);
   });
-  $(document.body).on('click', '.alpha-wish-list-row-hide', function() {
+  $(document.body).on('click', '.alpha-wish-list-back', function() {
     $('.alpha-wish-list-container').addClass('active');
     $('.alpha-wish-list-items-container').removeClass('active');
   });
+
+  updateAlphaWishLists();
 }
 
 function updateAlphaWishList(id) {
   var listItemsContainer = $('.alpha-wish-list-items-container');
   listItemsContainer.html('');
+  listItemsContainer.append(`
+    <div class="alpha-wish-list-header">
+      <h4>` + window.alphaWishLists[id].name + `</h4>
+      <button class="alpha-wish-list-back">Tillbaka</button>
+    </div>
+  `);
   listItemsContainer.append(`
     <table>
       <tr>
@@ -206,6 +327,15 @@ function updateAlphaWishLists() {
         `);
         listRow.addClass('alpha-wish-list-row');
         listContainer.find('table').append(listRow);
+      }
+
+      if (
+        $('.product.content-bubble').length &&
+        typeof window.alphaWishAddProductOnLoad !== 'undefined' &&
+        window.alphaWishAddProductOnLoad === 1
+      ) {
+        saveProductToWishlist();
+        window.alphaWishAddProductOnLoad = 0;
       }
     });
 }
