@@ -162,6 +162,7 @@ function alphaWishInit() {
         }
         .alpha-wish-open-modal-button {
           left: 10px;
+          right: auto;
         }
         .alpha-wish-close-modal-button {
           position: sticky;
